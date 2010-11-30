@@ -102,8 +102,8 @@ this alone unless you need to subclass or augment L<DBIx::Class::QueryLog>.
 
 =head2 querylog_args
 
-Accepts a HashRef of data which will be passed to L</querylog_class> when
-building the L</querylog>, unless a </querylog> is already defined.
+Accepts a HashRef of data which will be passed to L</"querylog_class"> when
+building the L</"querylog">, unless a </"querylog"> is already defined.
 
 =head1 SEE ALSO
 
