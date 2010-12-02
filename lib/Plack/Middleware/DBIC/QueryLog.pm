@@ -5,6 +5,8 @@ use Plack::Util;
 extends 'Plack::Middleware';
 our $VERSION = '0.01';
 
+sub PSGI_ENV { 'plack.middleware.dbic.querylog' }
+
 has 'querylog' => (
   is => 'ro',
   lazy => 1,
@@ -28,7 +30,7 @@ has 'querylog_args' => (
 
 sub call {
   my($self, $env) = @_;
-  $env->{'plack.middleware.dbic.querylog'} = $self->querylog;
+  $env->{PSGI_ENV} ||= $self->querylog;
   $self->app->($env);
 }
 
