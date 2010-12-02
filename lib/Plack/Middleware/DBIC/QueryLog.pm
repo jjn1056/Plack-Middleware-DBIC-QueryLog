@@ -1,31 +1,29 @@
 package Plack::Middleware::DBIC::QueryLog;
 
 use Moo;
+use Plack::Util;
 extends 'Plack::Middleware';
 our $VERSION = '0.01';
 
 has 'querylog' => (
   is => 'ro',
-  required => 1,
   lazy => 1,
   builder => '_build_querylog',
 );
 
 sub _build_querylog {
-  my $self = shift;
-  require $self->querylog_class
-    unless($self->querylog_class->can('can'));
-  return $self->querylog_class->new($self->querylog_args);
+  Plack::Util::load_class($_[0]->querylog_class)
+    ->new($_[0]->querylog_args);
 }
 
 has 'querylog_class' => (
   is => 'ro',
-  required => 1,
   default => sub {'DBIx::Class::QueryLog'},
 );
 
 has 'querylog_args' => (
   is => 'ro',
+  default => sub { +{} },
 );
 
 sub call {
@@ -44,7 +42,8 @@ Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog in Middleware
 
     use Plack::Builder;
     builder {
-        enable 'DBIC::QueryLog', querylog_args => {passthrough => 1};
+        enable 'DBIC::QueryLog',
+          querylog_args => {passthrough => 1};
         $app;
     };
 
@@ -99,6 +98,10 @@ tool, such as L<Bread::Board>
 This is the class which is used to build the L</querylog> unless one is already
 defined.  It defaults to L<DBIx::Class::QueryLog>.  You should probably leave
 this alone unless you need to subclass or augment L<DBIx::Class::QueryLog>.
+
+If the class name you pass has not already been included (via C<use> or 
+C<require>) we will automatically include it.  If the class name can't be found
+or loaded, an error will be reported.
 
 =head2 querylog_args
 

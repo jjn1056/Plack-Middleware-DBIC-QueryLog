@@ -1,11 +1,9 @@
-use strict;
-use warnings FATAL => 'all';
-
+use strictures 1;
 use Test::More;
 use Plack::Test;
-use Data::Dump ();
 use Plack::Middleware::DBIC::QueryLog;
 use HTTP::Request::Common qw(GET);
+use Data::Dump ();
 
 ok my $app = sub {
     my $env = shift;

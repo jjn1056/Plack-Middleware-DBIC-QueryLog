@@ -6,7 +6,8 @@ Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog in Middleware
 
     use Plack::Builder;
     builder {
-        enable 'DBIC::QueryLog', querylog_args => {passthrough => 1};
+        enable 'DBIC::QueryLog',
+          querylog_args => {passthrough => 1};
         $app;
     };
 
@@ -61,6 +62,10 @@ tool, such as [Bread::Board](http://search.cpan.org/perldoc?Bread::Board)
 This is the class which is used to build the L</querylog> unless one is already
 defined.  It defaults to [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog).  You should probably leave
 this alone unless you need to subclass or augment [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog).
+
+If the class name you pass has not already been included (via `use` or 
+`require`) we will automatically include it.  If the class name can't be found
+or loaded, an error will be reported.
 
 ## querylog_args
 
