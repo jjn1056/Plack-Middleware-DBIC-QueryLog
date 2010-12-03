@@ -2,6 +2,7 @@ package Plack::Middleware::DBIC::QueryLog;
 
 use Moo;
 use Plack::Util;
+use Plack::Middleware;
 extends 'Plack::Middleware';
 our $VERSION = '0.01';
 
@@ -30,7 +31,7 @@ has 'querylog_args' => (
 
 sub call {
   my($self, $env) = @_;
-  $env->{PSGI_ENV} ||= $self->querylog;
+  $env->{+PSGI_ENV} ||= $self->querylog;
   $self->app->($env);
 }
 
