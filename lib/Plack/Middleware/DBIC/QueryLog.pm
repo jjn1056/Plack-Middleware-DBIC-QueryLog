@@ -2,16 +2,37 @@ package Plack::Middleware::DBIC::QueryLog;
 
 use Moo;
 use Plack::Util;
-use Plack::Middleware;
 extends 'Plack::Middleware';
 our $VERSION = '0.01';
 
-sub PSGI_ENV { 'plack.middleware.dbic.querylog' }
+sub PSGI_KEY { 'plack.middleware.dbic.querylog' }
+
+has 'anything' => (is=>'ro');
+
+sub call {
+  my($self, $env) = @_;
+  $env->{+PSGI_KEY} ||= 111;
+
+  use Data::Dump 'dump';
+  warn dump $self;
+  warn dump $self->app;
+
+  $self->app->($env);
+}
+
+1;
+
+=head1 NAME
 
 has 'querylog' => (
   is => 'ro',
   lazy => 1,
   builder => '_build_querylog',
+);
+
+has 'querylog_class' => (
+  is => 'ro',
+  default => sub {'DBIx::Class::QueryLog'},
 );
 
 sub _build_querylog {
@@ -29,15 +50,6 @@ has 'querylog_args' => (
   default => sub { +{} },
 );
 
-sub call {
-  my($self, $env) = @_;
-  $env->{+PSGI_ENV} ||= $self->querylog;
-  $self->app->($env);
-}
-
-1;
-
-=head1 NAME
 
 Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog in Middleware
 

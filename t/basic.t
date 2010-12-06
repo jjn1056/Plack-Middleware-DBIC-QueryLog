@@ -12,6 +12,4 @@ is(
   'No errors wrapping the application',
 );
 
-
-
 done_testing();
