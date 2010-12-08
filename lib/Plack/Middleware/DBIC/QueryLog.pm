@@ -7,17 +7,6 @@ our $VERSION = '0.01';
 
 sub PSGI_KEY { 'plack.middleware.dbic.querylog' }
 
-has 'querylog' => (
-  is => 'ro',
-  lazy => 1,
-  builder => '_build_querylog',
-);
-
-sub _build_querylog {
-  Plack::Util::load_class($_[0]->querylog_class)
-    ->new($_[0]->querylog_args);
-}
-
 has 'querylog_class' => (
   is => 'ro',
   default => sub {'DBIx::Class::QueryLog'},
@@ -28,9 +17,14 @@ has 'querylog_args' => (
   default => sub { +{} },
 );
 
+sub create_querylog {
+  Plack::Util::load_class($_[0]->querylog_class)
+    ->new($_[0]->querylog_args);
+}
+  
 sub call {
   my($self, $env) = @_;
-  $env->{+PSGI_KEY} ||= $self->querylog;
+  $env->{+PSGI_KEY} ||= $self->create_querylog;
   $self->app->($env);
 }
 
@@ -44,7 +38,6 @@ Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog Instance in Middlewar
 
     use Plack::Builder;
     builder {
-      enable 'Debug::DBIC::QueryLog';
       enable 'DBIC::QueryLog',
       $app;
     };
@@ -53,7 +46,8 @@ Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog Instance in Middlewar
 
 L<Plack::Middleware::DBIC::QueryLog> does one thing, it places an object that
 is either an instance of L<DBIx::Class::QueryLog> OR a compatible object into
-the C<$env> under C<plack.middleware.dbic.querylog>.
+the C<$env> under C<plack.middleware.dbic.querylog>.  A new instance is created
+for each incoming request.
 
 The querylog is intended to be used L<DBIX::Class> to log and profile SQL
 queries, particularly during the context of a web request handled by your
@@ -84,31 +78,19 @@ Used like any other L<Plack> based middlewares.
 
 This middleware accepts the following arguments.
 
-=head2 querylog
-
-Accepts an instance of L<DBIx::Class::QueryLog> or compatible object.  If you
-need a custom version of this, or are mocking the interface, consider looking
-at L<Plack::Util/inline_object>.
-
-If you just want to pass arguments to L<DBIx::Class::QueryLog> you can use the
-L</querylog_args>.  This argument is provided if you have complicated or very
-customized instantiation needs, or your are using an IOC container or similar
-tool, such as L<Bread::Board>
-
 =head2 querylog_class
 
-This is the class which is used to build the L</querylog> unless one is already
+This is the class which is used to build the C<querylog> unless one is already
 defined.  It defaults to L<DBIx::Class::QueryLog>.  You should probably leave
 this alone unless you need to subclass or augment L<DBIx::Class::QueryLog>.
 
 If the class name you pass has not already been included (via C<use> or 
-C<require>) we will automatically include it.  If the class name can't be found
-or loaded, an error will be reported.
+C<require>) we will automatically try to c<require> it.
 
 =head2 querylog_args
 
 Accepts a HashRef of data which will be passed to L</"querylog_class"> when
-building the L</"querylog">, unless a </"querylog"> is already defined.
+building the C<querylog>.
 
 =head1 SEE ALSO
 
@@ -125,4 +107,5 @@ This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
 
