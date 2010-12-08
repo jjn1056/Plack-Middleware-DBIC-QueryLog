@@ -38,15 +38,15 @@ sub call {
 
 =head1 NAME
 
-Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog in Middleware
+Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog Instance in Middleware
 
 =head1 SYNOPSIS
 
     use Plack::Builder;
     builder {
-        enable 'DBIC::QueryLog',
-          querylog_args => {passthrough => 1};
-        $app;
+      enable 'Debug::DBIC::QueryLog';
+      enable 'DBIC::QueryLog',
+      $app;
     };
 
 =head1 DESCRIPTION
