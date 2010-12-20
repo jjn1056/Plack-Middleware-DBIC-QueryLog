@@ -7,6 +7,7 @@ Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog Instance in Middlewar
     use Plack::Builder;
     builder {
       enable 'DBIC::QueryLog',
+        querylog_args => {passthrough => 1};
       $app;
     };
 
@@ -17,7 +18,7 @@ is either an instance of [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?
 the `$env` under `plack.middleware.dbic.querylog`.  A new instance is created
 for each incoming request.
 
-The querylog is intended to be used [DBIX::Class](http://search.cpan.org/perldoc?DBIX::Class) to log and profile SQL
+The querylog is intended to be used by [DBIX::Class](http://search.cpan.org/perldoc?DBIX::Class) to log and profile SQL
 queries, particularly during the context of a web request handled by your
 [Plack](http://search.cpan.org/perldoc?Plack) application.  See the documentation for [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog) and
 in L<DBIx::Class::Storage/debugobj> for more information.
