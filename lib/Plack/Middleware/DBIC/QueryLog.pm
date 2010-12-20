@@ -17,14 +17,14 @@ has 'querylog_args' => (
   default => sub { +{} },
 );
 
-sub create_querylog {
+sub _create_querylog {
   Plack::Util::load_class($_[0]->querylog_class)
     ->new($_[0]->querylog_args);
 }
   
 sub call {
   my($self, $env) = @_;
-  $env->{+PSGI_KEY} ||= $self->create_querylog;
+  $env->{+PSGI_KEY} ||= $self->_create_querylog; 
   $self->app->($env);
 }
 
@@ -49,7 +49,7 @@ is either an instance of L<DBIx::Class::QueryLog> OR a compatible object into
 the C<$env> under C<plack.middleware.dbic.querylog>.  A new instance is created
 for each incoming request.
 
-The querylog is intended to be used L<DBIX::Class> to log and profile SQL
+The querylog is intended to be used by L<DBIX::Class> to log and profile SQL
 queries, particularly during the context of a web request handled by your
 L<Plack> application.  See the documentation for L<DBIx::Class::QueryLog> and
 in L<DBIx::Class::Storage/debugobj> for more information.

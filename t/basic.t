@@ -12,7 +12,7 @@ is $ql->querylog_class, 'DBIx::Class::QueryLog',
 is ref($ql->querylog_args), 'HASH',
   'correct default attribute';
 
-isa_ok $ql->create_querylog, 'DBIx::Class::QueryLog',
+isa_ok $ql->_create_querylog, 'DBIx::Class::QueryLog',
   'correctly created querylog';
 
 ok my $app = sub { [200, ['Content-Type' => 'text/plain'], ['Hello!']] },

@@ -1,21 +1,21 @@
 # NAME
 
-Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog in Middleware
+Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog Instance in Middleware
 
 # SYNOPSIS
 
     use Plack::Builder;
     builder {
-        enable 'DBIC::QueryLog',
-          querylog_args => {passthrough => 1};
-        $app;
+      enable 'DBIC::QueryLog',
+      $app;
     };
 
 # DESCRIPTION
 
 [Plack::Middleware::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::DBIC::QueryLog) does one thing, it places an object that
 is either an instance of [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog) OR a compatible object into
-the `$env` under `plack.middleware.dbic.querylog`.
+the `$env` under `plack.middleware.dbic.querylog`.  A new instance is created
+for each incoming request.
 
 The querylog is intended to be used [DBIX::Class](http://search.cpan.org/perldoc?DBIX::Class) to log and profile SQL
 queries, particularly during the context of a web request handled by your
@@ -46,31 +46,19 @@ Used like any other [Plack](http://search.cpan.org/perldoc?Plack) based middlewa
 
 This middleware accepts the following arguments.
 
-## querylog
-
-Accepts an instance of [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog) or compatible object.  If you
-need a custom version of this, or are mocking the interface, consider looking
-at L<Plack::Util/inline_object>.
-
-If you just want to pass arguments to [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog) you can use the
-L</querylog_args>.  This argument is provided if you have complicated or very
-customized instantiation needs, or your are using an IOC container or similar
-tool, such as [Bread::Board](http://search.cpan.org/perldoc?Bread::Board)
-
 ## querylog_class
 
-This is the class which is used to build the L</querylog> unless one is already
+This is the class which is used to build the `querylog` unless one is already
 defined.  It defaults to [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog).  You should probably leave
 this alone unless you need to subclass or augment [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog).
 
 If the class name you pass has not already been included (via `use` or 
-`require`) we will automatically include it.  If the class name can't be found
-or loaded, an error will be reported.
+`require`) we will automatically try to c<require> it.
 
 ## querylog_args
 
 Accepts a HashRef of data which will be passed to L</"querylog_class"> when
-building the L</"querylog">, unless a </"querylog"> is already defined.
+building the `querylog`.
 
 # SEE ALSO
 
