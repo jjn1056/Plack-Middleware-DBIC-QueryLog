@@ -38,7 +38,7 @@ Plack::Middleware::DBIC::QueryLog - Expose a DBIC QueryLog Instance in Middlewar
 
     use Plack::Builder;
     builder {
-      enable 'DBIC::QueryLog',
+      enable 'DBIC::QueryLog', querylog_args => {passthrough => 1};
       $app;
     };
 
