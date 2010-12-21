@@ -8,7 +8,6 @@ requires 'Plack' => '0.9957';
 requires 'Moo' => '0.009004';
 requires 'DBIx::Class::QueryLog' => '1.3.0';
 test_requires 'HTTP::Request::Common';
-test_requires 'strictures';
 test_requires 'Test::More';
 test_requires 'Test::Fatal';
 test_requires 'Data::Dump';

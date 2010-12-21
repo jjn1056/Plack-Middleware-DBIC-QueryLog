@@ -1,4 +1,8 @@
-use strictures 1;
+#!/usr/bin/env perl
+
+use strict;
+use warnings FATAL => 'all';
+
 use Test::More;
 use Plack::Test;
 use Plack::Middleware::DBIC::QueryLog;
