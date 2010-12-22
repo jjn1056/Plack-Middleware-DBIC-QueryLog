@@ -1,5 +1,8 @@
 Revision history for Perl extension Plack-Middleware-DBIC-QueryLog
 
+0.03    22 December 2010
+        - added missing meta info to Makefile.PL
+
 0.02    22 December 2010
         - documentation updates
         - fixed broken build
