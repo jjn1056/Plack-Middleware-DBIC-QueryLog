@@ -1,0 +1,8 @@
+Revision history for Perl extension Plack-Middleware-DBIC-QueryLog
+
+0.02    22 December 2010
+        - documentation updates
+        - fixed broken build
+
+0.01    20 December 2010
+        - First release, buyer beware.

@@ -12,6 +12,7 @@ test_requires 'Test::More';
 test_requires 'Test::Fatal';
 test_requires 'Data::Dump';
 test_requires 'Scalar::Util';
+test_requires 'Plack::Middleware::Debug';
 
 all_from 'lib/Plack/Middleware/DBIC/QueryLog.pm';
 require 'maint/Makefile.PL.include'
