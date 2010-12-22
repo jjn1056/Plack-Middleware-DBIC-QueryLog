@@ -27,21 +27,18 @@ This middleware is intended to act as a bridge between [DBIx::Class](http://sear
 can consume and populate the querylog, with a reporting tool such as seen in
 [Plack::Middleware::Debug::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::Debug::DBIC::QueryLog).  This functionality was refactored
 out of [Plack::Middleware::Debug::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::Debug::DBIC::QueryLog) to facilitate interoperation
-with other types of reporting tools.
+with other types of reporting tools.  For example, you may want query logging
+but you don't need the Plack debug panels.
 
 Unless you are building some custom logging tools, you probably just want to
 use the existing debug panel ([Plack::Middleware::Debug::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::Debug::DBIC::QueryLog))
-rather than building something custom around this middleware.
+rather than building something custom around this middleware.  
 
 If you are using an existing web application development system such as [Catalyst](http://search.cpan.org/perldoc?Catalyst),
 you can use [Catalyst::TraitFor::Model::DBIC::Schema::QueryLog::AdoptPlack](http://search.cpan.org/perldoc?Catalyst::TraitFor::Model::DBIC::Schema::QueryLog::AdoptPlack) to
 'hook' the query log into your [DBIx::Class](http://search.cpan.org/perldoc?DBIx::Class) schema model.  If you are using
 a different framework, or building your own, please consider releasing your
 code or sending me a document patch suitable for including in a workbook or FAQ.
-
-# USAGE
-
-Used like any other [Plack](http://search.cpan.org/perldoc?Plack) based middlewares.
 
 # ARGUMENTS
 
@@ -54,7 +51,7 @@ defined.  It defaults to [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?
 this alone unless you need to subclass or augment [DBIx::Class::QueryLog](http://search.cpan.org/perldoc?DBIx::Class::QueryLog).
 
 If the class name you pass has not already been included (via `use` or 
-`require`) we will automatically try to c<require> it.
+`require`) we will automatically try to `require` it.
 
 ## querylog_args
 
