@@ -3,7 +3,7 @@ package Plack::Middleware::DBIC::QueryLog;
 use Moo;
 use Plack::Util;
 extends 'Plack::Middleware';
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub PSGI_KEY { 'plack.middleware.dbic.querylog' }
 
@@ -59,21 +59,18 @@ This middleware is intended to act as a bridge between L<DBIx::Class>, which
 can consume and populate the querylog, with a reporting tool such as seen in
 L<Plack::Middleware::Debug::DBIC::QueryLog>.  This functionality was refactored
 out of L<Plack::Middleware::Debug::DBIC::QueryLog> to facilitate interoperation
-with other types of reporting tools.
+with other types of reporting tools.  For example, you may want query logging
+but you don't need the Plack debug panels.
 
 Unless you are building some custom logging tools, you probably just want to
 use the existing debug panel (L<Plack::Middleware::Debug::DBIC::QueryLog>)
-rather than building something custom around this middleware.
+rather than building something custom around this middleware.  
 
 If you are using an existing web application development system such as L<Catalyst>,
 you can use L<Catalyst::TraitFor::Model::DBIC::Schema::QueryLog::AdoptPlack> to
 'hook' the query log into your L<DBIx::Class> schema model.  If you are using
 a different framework, or building your own, please consider releasing your
 code or sending me a document patch suitable for including in a workbook or FAQ.
-
-=head1 USAGE
-
-Used like any other L<Plack> based middlewares.
 
 =head1 ARGUMENTS
 
@@ -86,7 +83,7 @@ defined.  It defaults to L<DBIx::Class::QueryLog>.  You should probably leave
 this alone unless you need to subclass or augment L<DBIx::Class::QueryLog>.
 
 If the class name you pass has not already been included (via C<use> or 
-C<require>) we will automatically try to c<require> it.
+C<require>) we will automatically try to C<require> it.
 
 =head2 querylog_args
 
