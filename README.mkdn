@@ -28,7 +28,8 @@ can consume and populate the querylog, with a reporting tool such as seen in
 [Plack::Middleware::Debug::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::Debug::DBIC::QueryLog).  This functionality was refactored
 out of [Plack::Middleware::Debug::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::Debug::DBIC::QueryLog) to facilitate interoperation
 with other types of reporting tools.  For example, you may want query logging
-but you don't need the Plack debug panels.
+but you don't need the Plack debug panels (maybe you are building an RPC or
+REST application server and want sql query logging, is a possible use case).
 
 Unless you are building some custom logging tools, you probably just want to
 use the existing debug panel ([Plack::Middleware::Debug::DBIC::QueryLog](http://search.cpan.org/perldoc?Plack::Middleware::Debug::DBIC::QueryLog))

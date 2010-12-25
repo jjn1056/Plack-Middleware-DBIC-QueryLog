@@ -5,7 +5,7 @@ use Plack::Util;
 use 5.008008;
 
 extends 'Plack::Middleware';
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub PSGI_KEY { 'plack.middleware.dbic.querylog' }
 
@@ -62,7 +62,8 @@ can consume and populate the querylog, with a reporting tool such as seen in
 L<Plack::Middleware::Debug::DBIC::QueryLog>.  This functionality was refactored
 out of L<Plack::Middleware::Debug::DBIC::QueryLog> to facilitate interoperation
 with other types of reporting tools.  For example, you may want query logging
-but you don't need the Plack debug panels.
+but you don't need the Plack debug panels (maybe you are building an RPC or
+REST application server and want sql query logging, is a possible use case).
 
 Unless you are building some custom logging tools, you probably just want to
 use the existing debug panel (L<Plack::Middleware::Debug::DBIC::QueryLog>)

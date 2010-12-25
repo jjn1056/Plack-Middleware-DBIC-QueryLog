@@ -26,7 +26,8 @@ ok my $app = sub { [200, ['Content-Type' => 'text/plain'], ['Hello!']] },
 is (
   exception {
     $app = builder {
-      enable 'Debug', panels =>['DBIC::QueryLog'];
+      enable 'DBIC::QueryLog',
+        querylog_args => {passthrough => 1};
       $app;
     };      
   },
