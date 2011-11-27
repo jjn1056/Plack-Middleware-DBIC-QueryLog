@@ -7,9 +7,12 @@ use 5.008008;
 extends 'Plack::Middleware';
 
 our $VERSION = '0.05';
-
 sub PSGI_KEY { 'plack.middleware.dbic.querylog' }
-sub get_querylog_from_env { shift->{+PSGI_KEY} }
+
+sub get_querylog_from_env {
+  my ($self_or_class, $env) = @_;
+  $env->{+PSGI_KEY};
+}
 
 has 'querylog_class' => (
   is => 'ro',

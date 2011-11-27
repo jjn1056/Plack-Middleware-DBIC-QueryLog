@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 
 use maint::Maker;
-all_from 'lib/Plack/Middleware/DBIC/QueryLog.pm';
 
+all_from 'lib/Plack/Middleware/DBIC/QueryLog.pm';
 requires 'Plack' => '0.9957';
 requires 'Moo' => '0.009004';
 requires 'DBIx::Class::QueryLog' => '1.3.0';
