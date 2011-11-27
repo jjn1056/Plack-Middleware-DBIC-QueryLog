@@ -5,13 +5,15 @@ use Plack::Util;
 use 5.008008;
 
 extends 'Plack::Middleware';
-our $VERSION = '0.04';
+
+our $VERSION = '0.05';
 
 sub PSGI_KEY { 'plack.middleware.dbic.querylog' }
+sub get_querylog_from_env { shift->{+PSGI_KEY} }
 
 has 'querylog_class' => (
   is => 'ro',
-  default => sub {'DBIx::Class::QueryLog'},
+  default => sub { 'DBIx::Class::QueryLog' },
 );
 
 has 'querylog_args' => (
@@ -23,10 +25,15 @@ sub _create_querylog {
   Plack::Util::load_class($_[0]->querylog_class)
     ->new($_[0]->querylog_args);
 }
-  
+
+sub find_or_create_querylog_in {
+  my ($self, $env) = @_;
+  $env->{+PSGI_KEY} ||= $self->_create_querylog;
+}
+
 sub call {
-  my($self, $env) = @_;
-  $env->{+PSGI_KEY} ||= $self->_create_querylog; 
+  my ($self, $env) = @_;
+  $self->find_or_create_querylog_in($env);
   $self->app->($env);
 }
 
@@ -67,7 +74,7 @@ REST application server and want sql query logging, is a possible use case).
 
 Unless you are building some custom logging tools, you probably just want to
 use the existing debug panel (L<Plack::Middleware::Debug::DBIC::QueryLog>)
-rather than building something custom around this middleware.  
+rather than building something custom around this middleware.
 
 If you are using an existing web application development system such as L<Catalyst>,
 you can use L<Catalyst::TraitFor::Model::DBIC::Schema::QueryLog::AdoptPlack> to
@@ -85,13 +92,38 @@ This is the class which is used to build the C<querylog> unless one is already
 defined.  It defaults to L<DBIx::Class::QueryLog>.  You should probably leave
 this alone unless you need to subclass or augment L<DBIx::Class::QueryLog>.
 
-If the class name you pass has not already been included (via C<use> or 
+If the class name you pass has not already been included (via C<use> or
 C<require>) we will automatically try to C<require> it.
 
 =head2 querylog_args
 
 Accepts a HashRef of data which will be passed to L</"querylog_class"> when
 building the C<querylog>.
+
+=head1 SUBROUTINES
+
+This middleware defines the following public subroutines
+
+=head2 PSGI_KEY
+
+Returns the PSGI C<$env> key under which you'd expect to find an instance of
+L<DBIx::Class::QueryLog>.
+
+=head2 get_querylog_from_env
+
+Given a L<Plack> C<$env>, returns a L<DBIx::Class::QueryLog>, if one exists.
+You should use this in your code that is trying to access the querylog.  For
+example:
+
+    use Plack::Middleware::DBIC::QueryLog;
+
+    sub get_querylog_from_env {
+      my ($self, $env) = @_;
+      Plack::Middleware::DBIC::QueryLog->get_querylog_from_env($env);
+    }
+
+This returns undef if it does not exist.  This is the officially supported
+interface for extracting a L<DBIx::Class::QueryLog> from a L<Plack> request.
 
 =head1 SEE ALSO
 
@@ -104,7 +136,7 @@ John Napiorkowski, C<< <jjnapiork@cpan.org> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2010, John Napiorkowski
+Copyright 2011, John Napiorkowski
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
